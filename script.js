@@ -5,6 +5,26 @@ document.addEventListener('DOMContentLoaded', function () {
   const taskInput = document.getElementById('task-input');
   const taskList = document.getElementById('task-list');
 
+  
+  let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+  tasks.forEach(task => {
+    const li = document.createElement('li');
+    li.textContent = task;
+
+    const removeBtn = document.createElement('button')
+    removeBtn.classList.add("remove-btn");
+    removeBtn.textContent = "Remove";
+
+    removeBtn.addEventListener('click', function () {
+      taskList.removeChild(li);
+      tasks = tasks.filter(t => t !== task);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    });
+    li.appendChild(removeBtn);
+    taskList.appendChild(li);
+  });
+
 //function to take user input and add it as a task
   function addTask() {
     const taskText = taskInput.value.trim();
@@ -15,15 +35,21 @@ document.addEventListener('DOMContentLoaded', function () {
       li.textContent = taskText;
 
       const removeBtn = document.createElement('button')
-      removeBtn.classList.add = "remove-btn";
+      removeBtn.classList.add("remove-btn");
       removeBtn.textContent = "Remove";
 
       removeBtn.addEventListener('click', function () {
-        taskList.removeChild(li)
+        taskList.removeChild(li);
+        tasks = tasks.filter(text => text !== taskText);
+
+        localStorage.setItem('tasks', JSON.stringify(tasks));
       });
       
       li.appendChild(removeBtn);
       taskList.appendChild(li);
+
+      tasks.push(taskText);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
 
       taskInput.value = '';
     }
