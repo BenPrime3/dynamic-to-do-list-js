@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
   let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
-  tasks.forEach(task => {
+  function loadTasks(task) {
     const li = document.createElement('li');
     li.textContent = task;
 
@@ -23,6 +23,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     li.appendChild(removeBtn);
     taskList.appendChild(li);
+  }
+
+  tasks.forEach(task => {
+    loadTasks(task)
   });
 
 //function to take user input and add it as a task
@@ -34,20 +38,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const li = document.createElement('li');
       li.textContent = taskText;
 
-      const removeBtn = document.createElement('button')
-      removeBtn.classList.add("remove-btn");
-      removeBtn.textContent = "Remove";
-
-      removeBtn.addEventListener('click', function () {
-        taskList.removeChild(li);
-        tasks = tasks.filter(text => text !== taskText);
-
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-      });
+      loadTasks(taskText)
       
-      li.appendChild(removeBtn);
-      taskList.appendChild(li);
-
       tasks.push(taskText);
       localStorage.setItem('tasks', JSON.stringify(tasks));
 
